@@ -8,8 +8,6 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import com.auth0.jwt.exceptions.JWTVerificationException;
-
 @RestControllerAdvice
 public class ErrorHandler {
 
@@ -30,13 +28,11 @@ public class ErrorHandler {
 
 	@ExceptionHandler(InvalidTokenException.class)
 	public ResponseEntity<String> tratarErroTokenInvalido(InvalidTokenException ex) {
-		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.getMessage());
+		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ex.getMessage());
 	}
 
-	@ExceptionHandler(JWTVerificationException.class)
-	public ResponseEntity<String> tratarErroJWTVerification(JWTVerificationException ex) {
-		InvalidTokenException invalidTokenException = new InvalidTokenException("Invalid or expired JWT token");
-		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(invalidTokenException.getMessage());
+	@ExceptionHandler(DuplicateEntityException.class)
+	public ResponseEntity<String> tratarErroEntidadeExistente(DuplicateEntityException ex){
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
 	}
-
 }

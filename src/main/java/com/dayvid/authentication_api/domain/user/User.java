@@ -30,6 +30,10 @@ public class User implements UserDetails {
 	private String username;
 	private String password;
 
+	public User(String username, String encryptePassword) {
+		this.username = username;
+		this.password = encryptePassword;
+	}
 	
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return List.of(new SimpleGrantedAuthority("ROLE_USER"));
@@ -42,5 +46,6 @@ public class User implements UserDetails {
 	public String getPassword() {
 		return this.password;
 	}
+
 	
 }

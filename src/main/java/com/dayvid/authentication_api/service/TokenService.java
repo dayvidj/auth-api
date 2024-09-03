@@ -12,7 +12,6 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.dayvid.authentication_api.domain.user.User;
-import com.dayvid.authentication_api.exception.InvalidTokenException;
 
 @Service
 public class TokenService {
@@ -23,7 +22,7 @@ public class TokenService {
 		try {
 			var algorithm = Algorithm.HMAC256(secret);
 			return JWT.create()
-					.withIssuer("Authentication API")
+					.withIssuer("Authentication-API")
 					.withSubject(user.getUsername())
 					.withExpiresAt(dateExpiration())
 					.sign(algorithm);
@@ -36,12 +35,12 @@ public class TokenService {
 		try {
 		    Algorithm algorithm = Algorithm.HMAC256(secret);
 		    return JWT.require(algorithm)
-		    		.withIssuer("Authentication API")
+		    		.withIssuer("Authentication-API")
 		    		.build()
 		    		.verify(tokenJWT)
 		    		.getSubject();
 		} catch (JWTVerificationException exception){
-			throw new InvalidTokenException("Invalid or expired JWT token");
+			return "";
 		}	
 	}
 

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.dayvid.authentication_api.domain.user.User;
 import com.dayvid.authentication_api.domain.user.UserDataDTO;
+import com.dayvid.authentication_api.domain.user.UserService;
 import com.dayvid.authentication_api.security.TokenJWT;
 import com.dayvid.authentication_api.service.TokenService;
 
@@ -28,7 +29,10 @@ public class AuthenticationController {
 	@Autowired
 	private TokenService tokenService;
 	
-	@PostMapping
+	@Autowired
+	private UserService service;
+	
+	@PostMapping("/login")
 	public ResponseEntity login(@RequestBody @Valid UserDataDTO data) {
 		var authenticationToken = new UsernamePasswordAuthenticationToken(data.username(), data.password());
 		var authentication = manager.authenticate(authenticationToken);
@@ -37,11 +41,15 @@ public class AuthenticationController {
 		return ResponseEntity.ok(new TokenJWT(tokenJWT));
 	}
 	
+	@PostMapping("/register") 
+	public ResponseEntity register(@RequestBody UserDataDTO data) {
+		service.saveUser(data);
+		return ResponseEntity.ok().build();
+	}
+	
 	@GetMapping("/foo-bar")
 	public ResponseEntity getFooBar() {
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	} 
-	
-	
 	
 }
